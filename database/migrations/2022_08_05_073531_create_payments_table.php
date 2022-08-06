@@ -13,12 +13,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table)
+        {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->enum('status', ['new', 'pending', 'completed', 'expired', 'rejected']);
             $table->integer('amount');
-            $table->timestamp('timestamp')->useCurrent();
+            $table->integer('amount_paid');
+            $table->integer('timestamp');
+            $table->string('signature_1');
+            $table->string('signature_2');
 
             $table->comment('Таблица платежей');
         });

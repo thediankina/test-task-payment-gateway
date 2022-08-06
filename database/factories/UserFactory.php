@@ -11,9 +11,13 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $cardDetails = fake()->creditCardDetails();
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $cardDetails['name'],
+            'card_type' => $cardDetails['type'],
+            'card_number' => $cardDetails['number'],
+            'card_expiration_date' => $cardDetails['expirationDate'],
         ];
     }
 }
