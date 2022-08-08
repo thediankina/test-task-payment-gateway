@@ -1,18 +1,16 @@
 <?php
 
+use App\Models\Alpha\Payment as AlphaPayment;
+use App\Models\Beta\Payment as BetaPayment;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('gateway/alpha/{id}', function ($id) {
+    AlphaPayment::query()->find($id)->update(['status' => 'expired']);
+    return Response::json(AlphaPayment::$response);
+});
 
-Route::get('/', function () {
-    return view('index');
+Route::get('gateway/beta/{id}', function ($id) {
+    BetaPayment::query()->find($id)->update(['status' => 'expired']);
+    return Response::json(BetaPayment::$response);
 });

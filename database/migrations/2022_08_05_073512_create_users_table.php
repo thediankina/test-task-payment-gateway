@@ -17,9 +17,11 @@ return new class extends Migration
         {
             $table->id();
             $table->string('name', 100);
+            $table->string('email', 30);
             $table->string('card_type', 20);
             $table->string('card_number', 20);
             $table->string('card_expiration_date', 5);
+            $table->integer('card_code');
 
             $table->comment('Таблица пользователей');
         });

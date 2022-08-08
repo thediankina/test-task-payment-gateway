@@ -12,17 +12,15 @@ class PaymentFactory extends Factory
     public function definition(): array
     {
         $amount = fake()->randomNumber();
-        // Call to signature formation functions
-        $testSignature1 = 'f027612e0e6cb321ca161de060237eeb97e46000da39d3add08d09074f931728';
-        $testSignature2 = 'SNuHufEJ';
+        $amount_paid = fake()->numberBetween(0, $amount);
+        $timestamp = now()->timestamp;
 
         return [
+            'merchant_id' => 6,
             'status' => 'new',
             'amount' => $amount,
-            'amount_paid' => fake()->numberBetween(0, $amount),
-            'timestamp' => now()->timestamp,
-            'signature_1' => $testSignature1,
-            'signature_2' => $testSignature2,
+            'amount_paid' => $amount_paid,
+            'timestamp' => $timestamp,
         ];
     }
 }

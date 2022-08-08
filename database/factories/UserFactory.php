@@ -15,9 +15,11 @@ class UserFactory extends Factory
 
         return [
             'name' => $cardDetails['name'],
+            'email' => fake()->safeEmail(),
             'card_type' => $cardDetails['type'],
             'card_number' => $cardDetails['number'],
             'card_expiration_date' => $cardDetails['expirationDate'],
+            'card_code' => fake()->randomNumber(3, true),
         ];
     }
 }

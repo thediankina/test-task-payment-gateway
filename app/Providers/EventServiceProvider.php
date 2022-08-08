@@ -2,13 +2,30 @@
 
 namespace App\Providers;
 
+use App\Models\Alpha\Payment as AlphaPayment;
+use App\Models\Beta\Payment as BetaPayment;
+use App\Observers\Alpha\Gateway as AlphaGateway;
+use App\Observers\Beta\Gateway as BetaGateway;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
+    /**
+     * @inheritdoc
+     */
+    protected $observers = [
+
+        AlphaPayment::class => [
+            AlphaGateway::class,
+        ],
+
+        BetaPayment::class => [
+            BetaGateway::class,
+        ],
+    ];
+
     /**
      * The event to listener mappings for the application.
      *

@@ -17,12 +17,11 @@ return new class extends Migration
         {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->integer('merchant_id');
             $table->enum('status', ['new', 'pending', 'completed', 'expired', 'rejected']);
             $table->integer('amount');
             $table->integer('amount_paid');
             $table->integer('timestamp');
-            $table->string('signature_1');
-            $table->string('signature_2');
 
             $table->comment('Таблица платежей');
         });

@@ -23,11 +23,25 @@ class User extends Model
     /**
      * @inheritdoc
      */
+    protected $attributes = [
+        'id',
+        'name',
+        'email',
+        'card_type',
+        'card_number',
+        'card_expiration_date',
+        'card_code',
+    ];
+
+    /**
+     * @inheritdoc
+     */
     protected $fillable = [
         'name',
         'card_type',
         'card_number',
         'card_expiration_date',
+        'card_code',
     ];
 
     /**
