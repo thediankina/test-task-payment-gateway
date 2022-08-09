@@ -9,7 +9,7 @@ use Illuminate\Database\Seeder;
 class UserSeeder extends Seeder
 {
     /**
-     * Генерация тестовых пользователей
+     * Генерация тестовых пользователейи платежей
      *
      * @return void
      */

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->integer('merchant_id');
-            $table->enum('status', ['new', 'pending', 'completed', 'expired', 'rejected']);
+            $table->enum('status', config('constants.payment_statuses'));
             $table->integer('amount');
             $table->integer('amount_paid');
             $table->integer('timestamp');

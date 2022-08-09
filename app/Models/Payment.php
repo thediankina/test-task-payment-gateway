@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $amount
  * @property int $amount_paid
  * @property int $timestamp
- * @property string $signature
  */
 class Payment extends Model
 {
@@ -23,20 +23,6 @@ class Payment extends Model
      * @inheritdoc
      */
     protected $table = 'payments';
-
-    /**
-     * @inheritdoc
-     */
-    protected $attributes = [
-        'id',
-        'user_id',
-        'merchant_id',
-        'status',
-        'amount',
-        'amount_paid',
-        'timestamp',
-    ];
-
     /**
      * @inheritdoc
      */
@@ -52,19 +38,13 @@ class Payment extends Model
     /**
      * @inheritdoc
      */
-    protected $appends = [
-        'signature',
-    ];
-
-    /**
-     * @inheritdoc
-     */
-    protected $hidden = [
-        'user_id',
-    ];
-
-    /**
-     * @inheritdoc
-     */
     public $timestamps = false;
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

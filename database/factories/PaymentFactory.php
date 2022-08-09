@@ -11,13 +11,18 @@ class PaymentFactory extends Factory
      */
     public function definition(): array
     {
+        $timestamp = now()->timestamp;
         $amount = fake()->randomNumber();
         $amount_paid = fake()->numberBetween(0, $amount);
-        $timestamp = now()->timestamp;
+        $statuses = config('constants.payment_statuses');
+
+        if ($amount_paid < $amount) {
+            unset($statuses[array_search('completed', $statuses)]);
+        }
 
         return [
-            'merchant_id' => 6,
-            'status' => 'new',
+            'merchant_id' => array_rand(array_flip(config('constants.merchant_ids'))),
+            'status' => array_rand(array_flip($statuses)),
             'amount' => $amount,
             'amount_paid' => $amount_paid,
             'timestamp' => $timestamp,

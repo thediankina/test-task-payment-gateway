@@ -17,7 +17,7 @@ return new class extends Migration
         {
             $table->id();
             $table->string('name', 100);
-            $table->string('email', 30);
+            $table->string('email', 50);
             $table->string('card_type', 20);
             $table->string('card_number', 20);
             $table->string('card_expiration_date', 5);

@@ -25,6 +25,7 @@ class Gateway
     public function updated(Payment $payment): Response
     {
         $payment->timestamp = now()->timestamp;
+        $payment->save();
 
         $payment->amount *= 100;
         $payment->amount_paid *= 100;
