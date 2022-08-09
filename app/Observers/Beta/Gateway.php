@@ -3,8 +3,10 @@
 namespace App\Observers\Beta;
 
 use App\Models\Payment;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Response;
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class Gateway
 {
@@ -14,17 +16,44 @@ class Gateway
     public bool $afterCommit = true;
 
     /**
-     * @param Payment $payment
-     * @return JsonResponse
+     * @var string
      */
-    public function updated(Payment $payment): JsonResponse
+    protected string $merchant_key = 'rTaasVHeteGbhwBx';
+
+    /**
+     * @param Payment $payment
+     * @return PromiseInterface|Response
+     */
+    public function updated(Payment $payment): PromiseInterface|Response
     {
-        return Response::json(
-            array_filter(
-                $payment->toArray(),
-                fn($key) => in_array($key, $payment->getVisible()),
-                ARRAY_FILTER_USE_KEY
-            )
-        );
+        $payment->amount *= 100;
+        $payment->amount_paid *= 100;
+
+        return Http::withHeaders(['Authorization' => $this->sign($payment)])
+            ->asForm()
+            ->post(config('constants.callback_url'),
+                [
+                    'project' => $payment->merchant_id,
+                    'invoice' => $payment->id,
+                    'status' => $payment->status,
+                    'amount' => $payment->amount,
+                    'amount_paid' => $payment->amount_paid,
+                    'rand' => Str::random(10),
+                ]
+            );
+    }
+
+    /**
+     * Сформировать подпись
+     *
+     * @param Payment $payment
+     * @return string
+     */
+    private function sign(Payment $payment): string
+    {
+        $attributes = $payment->attributesToArray();
+        $string = implode('.', $attributes) . $this->merchant_key;
+
+        return hash('md5', $string);
     }
 }

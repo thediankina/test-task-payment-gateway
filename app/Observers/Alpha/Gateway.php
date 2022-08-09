@@ -2,7 +2,9 @@
 
 namespace App\Observers\Alpha;
 
-use App\Models\Alpha\Payment;
+use App\Models\Payment;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 
 class Gateway
 {
@@ -12,21 +14,46 @@ class Gateway
     public bool $afterCommit = true;
 
     /**
-     * @param Payment $payment
-     * @return bool
+     * @var string
      */
-    public function updated(Payment $payment): bool
-    {
-        Payment::$response = [
-            'merchant_id' => $payment->merchant_id,
-            'payment_id' => $payment->id,
-            'status' => $payment->status,
-            'amount' => $payment->amount,
-            'amount_paid' => $payment->amount_paid,
-            'timestamp' => $payment->timestamp,
-            'sign' => $payment->signature,
-        ];
+    private string $merchant_key = 'KaTf5tZYHx4v7pgZ';
 
-        return true;
+    /**
+     * @param Payment $payment
+     * @return Response
+     */
+    public function updated(Payment $payment): Response
+    {
+        $payment->timestamp = now()->timestamp;
+
+        $payment->amount *= 100;
+        $payment->amount_paid *= 100;
+
+        return Http::post(
+            config('constants.callback_url'),
+            [
+                'merchant_id' => $payment->merchant_id,
+                'payment_id' => $payment->id,
+                'status' => $payment->status,
+                'amount' => $payment->amount,
+                'amount_paid' => $payment->amount_paid,
+                'timestamp' => $payment->timestamp,
+                'sign' => $this->sign($payment),
+            ]
+        );
+    }
+
+    /**
+     * Сформировать подпись
+     *
+     * @param Payment $payment
+     * @return string
+     */
+    private function sign(Payment $payment): string
+    {
+        $attributes = $payment->attributesToArray();
+        $string = implode(':', $attributes) . $this->merchant_key;
+
+        return hash('sha256', $string);
     }
 }

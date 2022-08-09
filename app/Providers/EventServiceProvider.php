@@ -2,8 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Alpha\Payment as AlphaPayment;
-use App\Models\Beta\Payment as BetaPayment;
+use App\Models\Payment;
 use App\Observers\Alpha\Gateway as AlphaGateway;
 use App\Observers\Beta\Gateway as BetaGateway;
 use Illuminate\Auth\Events\Registered;
@@ -16,12 +15,8 @@ class EventServiceProvider extends ServiceProvider
      * @inheritdoc
      */
     protected $observers = [
-
-        AlphaPayment::class => [
+        Payment::class => [
             AlphaGateway::class,
-        ],
-
-        BetaPayment::class => [
             BetaGateway::class,
         ],
     ];
