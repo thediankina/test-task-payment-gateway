@@ -14,5 +14,5 @@ class Payment extends Model
         'timestamp',
     ];
 
-    protected $timestamps = false;
+    public $timestamps = false;
 }
