@@ -1,6 +1,7 @@
 FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG RUN_SERVER_COMMAND="php artisan serve --host=0.0.0.0 --port=80"
 
 RUN apt-get update && apt-get install -y \
     php \
@@ -26,4 +27,4 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-CMD [ "bash", "-c", "php artisan serve --host=0.0.0.0 --port=80" ]
+CMD [ "bash", "-c", ${RUN_SERVER_COMMAND} ]
