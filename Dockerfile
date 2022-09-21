@@ -1,7 +1,6 @@
 FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG RUN_SERVER_COMMAND="php artisan serve --host=0.0.0.0 --port=80"
 
 RUN apt-get update && apt-get install -y \
     php \
@@ -18,8 +17,7 @@ RUN apt-get update && apt-get install -y \
     php-bcmath \
     php-mbstring \
     php-pgsql \
-    unzip \
-    nginx
+    unzip
 
 RUN apt-get clean && apt-get -y autoremove
 
@@ -27,4 +25,4 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-CMD [ "bash", "-c", ${RUN_SERVER_COMMAND} ]
+CMD [ "bash", "-c", "php artisan serve --host=0.0.0.0 --port=80" ]
