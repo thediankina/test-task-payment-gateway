@@ -1,33 +1,17 @@
-version: "3.7"
+version: '3.7'
 
 services:
   application:
-    build: .
-    image: payment-gateway/server
+    image: app/server:latest
     volumes:
-      - ./app:/var/www/html
+      - ./app:/var/www
     ports:
-      - "80:80"
-    networks:
-      - backend
+      - 80:80
   database:
     image: postgres:12
     environment:
-      PGPASSWORD: test
       POSTGRES_DB: main
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: test
-    volumes:
-      - data-pgsql:/var/lib/postgresql/data
+      POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
-    networks:
-      - backend
-
-networks:
-  backend:
-    driver: bridge
-
-volumes:
-  data-pgsql:
-    driver: local
+      - 5432:5432
