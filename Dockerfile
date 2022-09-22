@@ -18,6 +18,12 @@ COPY server/apache2.conf /etc/apache2/apache2.conf
 COPY server/php.ini /etc/php/7.4/apache2/php.ini
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+WORKDIR /var/www
+
+COPY app/ .
+
+RUN COMPOSER_VENDOR_DIR="/var/vendor" composer install --ignore-platform-req=ext-curl
+
 RUN a2enmod rewrite && service apache2 restart
 
 EXPOSE 80
